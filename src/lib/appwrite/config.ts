@@ -6,6 +6,7 @@ export const appwriteconfig = {
 }
 
 export const client = new Client();
+console.log(appwriteconfig.projectId);
 client.setProject(appwriteconfig.projectId);
 client.setEndpoint(appwriteconfig.url);
 
