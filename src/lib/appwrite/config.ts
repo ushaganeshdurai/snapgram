@@ -1,8 +1,13 @@
 import {Client,Account,Avatars,Databases,Storage} from 'appwrite';
 
 export const appwriteconfig = {
-    projectId:import.meta.env.PRO_ID,
-    url:'https://cloud.appwrite.io/v1'
+    projectId:'653f118ca2d1675bf59c',
+    url: 'https://cloud.appwrite.io/v1',
+    dbId:import.meta.env.VITE_APPWRITE_DB,
+    storageId:import.meta.env.VITE_APPWRITE_STORAGE_ID,
+    usercollId:import.meta.env.VITE_APPWRITE_USERS_ID,
+    postcollId:import.meta.env.VITE_APPWRITE_POSTS_ID,
+    savecollId:import.meta.env.VITE_APPWRITE_SAVES_ID
 }
 
 export const client = new Client();

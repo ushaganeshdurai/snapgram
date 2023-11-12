@@ -16,8 +16,14 @@ import { SignupValidation } from "../../lib/validation";
 import Loader from "../../components/ui/shared/Loader";
 import { Link } from "react-router-dom";
 import { createUserAccount } from "../../lib/appwrite/api";
+import { useToast } from "../../components/ui/use-toast";
+import { useCreateUserAccountMutation, useSignInAccountMutation } from "../../lib/react-query/queriesmutation";
 const SignupForm = () => {
-  const isLoading = false;
+  const {toast}=useToast();
+  const {mutateAsync:createUserAccount,isLoading:isCreatingUser} = useCreateUserAccountMutation()
+{/* rename mutatasync to createUseraccount and isloading to iscreatinguser */}
+
+const {mutateAsync:signInAccount,isLoading:isSigningIn}=useSignInAccountMutation()
 
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
@@ -32,8 +38,17 @@ const SignupForm = () => {
  async function onSubmit(values: z.infer<typeof SignupValidation>) {
 //create the user
 const newUser = await createUserAccount(values);
-console.log(newUser);
-
+if(!newUser){
+  return toast({
+    title:"Sign up failed",
+  }); 
+}
+const session = await signInAccount({
+  email:values.email,
+  password:values.password
+}) 
+if(!session)
+return toast({title:'Sign In Failed. Please try again'})
   }
 
   return (
@@ -118,7 +133,7 @@ console.log(newUser);
             )}
           />
           <Button type="submit" className="shad-button_primary">
-            {isLoading ? (
+            {isCreatingUser ? (
               <div className="flex-center gap-2">
                 Loading...
                 <Loader />
